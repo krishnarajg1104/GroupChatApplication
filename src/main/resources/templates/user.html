@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <style>
+        html, body {
+            height: 100%; /* Full height for body and html to ensure proper centering */
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #f5f5f5; /* Light gray background */
+            font-family: Arial, sans-serif; /* Clean, modern font */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd; 
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container h2 {
+            margin-top: 0;
+            color: #075e54; /* WhatsApp green */
+            user-select: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%; /* Full width for form elements */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333; /* Darker text for readability */
+            user-select: none;
+        }
+        input[type="text"], input[type="password"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd; /* Matching border with container */
+            border-radius: 5px; /* Rounded edges for inputs */
+            box-sizing: border-box;
+        }
+        .checkBox {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .checkBox input {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #075e54; /* WhatsApp green */
+            color: #ffffff;
+            border: none;
+            border-radius: 5px; /* Rounded corners for buttons */
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #128C7E; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 th:text="${user.userId != null ? 'Edit User' : 'Create User'}"></h2>
+        <form th:action="@{${user.userId != null ? '/api/user/update/' + user.userId : '/api/user/create'}}" method="post" th:object="${user}">
+            <div class="form-group">
+                <label for="userName">Username:</label>
+                <input type="text" id="userName" th:field="*{userName}" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="staffNo">Staff Number:</label>
+                <input type="text" id="staffNo" th:field="*{staffNo}" placeholder="Enter staff number" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" th:field="*{password}" placeholder="Enter password" required>
+            </div>
+            <div class="form-group">
+                <label for="staffFirstName">First Name:</label>
+                <input type="text" id="staffFirstName" th:field="*{staffFirstName}" placeholder="Enter first name" required>
+            </div>
+            <div class="form-group">
+                <label for="staffLastName">Last Name:</label>
+                <input type="text" id="staffLastName" th:field="*{staffLastName}" placeholder="Enter last name" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" th:field="*{role}" required>
+                    <option value="admin" th:selected="${user.role == 'admin'}">Admin</option>
+                    <option value="user" th:selected="${user.role == 'user'}">User</option>
+                </select>
+            </div>
+            <div class="form-group checkBox">
+                <input type="checkbox" id="isActive" th:field="*{isActive}">
+                <label for="isActive">Check if the user is active</label>
+            </div>
+            <div class="form-group">
+                <button type="submit">Save User</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

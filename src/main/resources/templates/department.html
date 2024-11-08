@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Department</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container h2 {
+            margin-top: 0;
+            color: #075e54;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .form-group.checkBox {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .form-group.checkBox input {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #075e54;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Create Department</h2>
+        <form th:action="@{/api/department/create}" method="post" th:object="${department}">
+            <div class="form-group">
+                <label for="deptName">Department Name:</label>
+                <input type="text" id="deptName" th:field="*{deptName}" placeholder="Enter department name" required>
+            </div>
+            <div class="form-group">
+                <label for="deptType">Department Type:</label>
+                <select id="deptType" th:field="*{deptType}" required>
+                    <option th:each="type : ${deptTypes}" th:value="${type.deptTypeId}" th:text="${type.deptTypeName}"></option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="branch">Branch:</label>
+                <select id="branch" th:field="*{branch}" required>
+                    <option th:each="branch : ${branches}" th:value="${branch.branchId}" th:text="${branch.branchName}"></option>
+                </select>
+            </div>
+            <div class="form-group checkBox">
+                <input type="checkbox" id="isActive" th:field="*{isActive}">
+                <label for="isActive">Active</label>
+            </div>
+            <button type="submit">Create Department</button>
+        </form>
+    </div>
+</body>
+</html>

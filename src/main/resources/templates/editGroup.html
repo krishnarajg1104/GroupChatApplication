@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Group</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container h2 {
+            margin-top: 0;
+            color: #075e54;
+        }
+        .container .back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #075e54;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container .back:hover {
+            background-color: #128C7E;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .checkBox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .checkBox input {
+            width: auto;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #075e54;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Edit Group</h2>
+        <a href="#" th:href="@{/api/group/list}" class="back">Back</a>
+        <form th:action="@{/api/group//{id}(id=${group.groupId})}" method="post">
+            <input type="hidden" name="groupId" th:value="${group.groupId}">
+            <div class="form-group">
+                <label for="groupName">Group Name:</label>
+                <input type="text" id="groupName" name="groupName" th:value="${group.groupName}" required>
+            </div>
+            <div class="form-group">
+                <label for="deptId">Department:</label>
+                <select id="deptId" name="deptId" required>
+                    <option th:each="dept : ${departments}" th:value="${dept.deptId}" th:text="${dept.deptName}" th:selected="${group.department != null && group.department.deptId == dept.deptId}"></option>
+                </select>
+            </div>
+            <div class="form-group checkBox">
+                <input type="checkbox" id="isActive" name="isActive" th:checked="${group.isActive}">
+                <label for="isActive">Active</label>
+            </div>
+            <button type="submit">Update Group</button>
+        </form>
+    </div>
+</body>
+</html>

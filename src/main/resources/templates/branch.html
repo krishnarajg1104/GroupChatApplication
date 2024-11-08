@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Branch</title>
+     <style>
+        html, body {
+            height: 100%; /* Full height for body and html to ensure proper centering */
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #f5f5f5; /* Light gray background */
+            font-family: Arial, sans-serif; /* Clean, modern font */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd; 
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container h2 {
+            margin-top: 0;
+            color: #075e54; /* WhatsApp green */
+            user-select: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%; /* Full width for form elements */
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333; /* Darker text for readability */
+            user-select: none;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd; /* Matching border with container */
+            border-radius: 5px; /* Rounded edges for inputs */
+            box-sizing: border-box;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .checkBox {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .checkBox input {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #075e54; /* WhatsApp green */
+            color: #ffffff;
+            border: none;
+            border-radius: 5px; /* Rounded corners for buttons */
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #128C7E; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+	<div class="nav-bar">
+        <div class="left-section">
+            <div class="title">TeamSynK - GroupChat</div>
+            <a class="home-button" th:href="@{/home}">Home</a>
+        </div>
+        <div class="menu">
+            <input type="checkbox" id="menu-toggle">
+            <label class="menu-button" for="menu-toggle">☰</label>
+            <div class="dropdown-content">
+                <a href="#" th:href="@{/settings}">Settings</a>
+                <a href="#" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Create Branch</h2>
+        <form th:action="@{/api/branch/create}" method="post" th:object="${branch}">
+            <div class="form-group">
+                <label for="branchName">Branch Name:</label>
+                <input type="text" id="branchName" th:field="*{branchName}" placeholder="Enter branch name" required>
+            </div>
+            <div class="form-group">
+                <label for="companyId">Company:</label>
+                <select id="companyId" th:field="*{companyId}" required>
+                    <option value="" disabled selected>Select a company</option>
+                    <option th:each="company : ${companies}" th:value="${company.companyId}" th:text="${company.companyName}">Company Name</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" th:field="*{address}" placeholder="Enter address" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" id="location" th:field="*{location}" placeholder="Enter location" required>
+            </div>
+            <div class="form-group checkBox">
+                <input type="checkbox" id="isActive" th:field="*{isActive}">
+                <label for="isActive">Check if the branch is active</label>
+            </div>
+            <div class="form-group">
+                <button type="submit">Create Branch</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
