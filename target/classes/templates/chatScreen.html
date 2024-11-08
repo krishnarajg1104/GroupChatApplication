@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Chat</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #e5ddd5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            max-width: 500px;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            box-sizing: border-box;
+        }
+        .back-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #075e54;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .back-button:hover {
+            background-color: #128C7E;
+        }
+        .container h2 {
+            margin-top: 40px;
+            color: #075e54;
+            user-select: none;
+            text-align: center;
+        }
+        .message-box {
+            width: 100%;
+            height: calc(100% - 160px);
+            overflow-y: auto;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        .form-group {
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+        input[type="text"] {
+            width: calc(100% - 90px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #075e54;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+        .message {
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .user {
+            font-weight: bold;
+        }
+        .text {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-button" onclick="goBack()">Back</button>
+        <h2>Group Chat</h2>
+        <div class="message-box" id="messageBox">
+            <!-- Messages will be appended here dynamically -->
+        </div>
+        <form id="messageForm">
+            <div class="form-group">
+                <input type="text" id="messageInput" placeholder="Type your message..." required>
+                <button type="submit">Send</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const messageBox = document.getElementById('messageBox');
+        const messageInput = document.getElementById('messageInput');
+        const messageForm = document.getElementById('messageForm');
+
+        // Replace with your WebSocket server URL
+        const ws = new WebSocket('ws://localhost:8080/ws/messages');
+
+        ws.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onmessage = (event) => {
+            const message = JSON.parse(event.data);
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+
+            messageElement.innerHTML = `
+                <div class="user">User ${message.userId}</div>
+                <div class="text">${message.msg}</div>
+            `;
+            messageBox.appendChild(messageElement);
+            messageBox.scrollTop = messageBox.scrollHeight; // Scroll to the bottom
+        };
+
+        messageForm.onsubmit = (event) => {
+            event.preventDefault();
+            const message = {
+                msg: messageInput.value,
+                userId: 1,  // Replace with actual user ID
+                groupId: 1, // Replace with actual group ID
+                deptId: 1,  // Replace with actual department ID
+                createdBy: 1 // Replace with actual creator ID
+            };
+            ws.send(JSON.stringify(message)); // Send the message to the WebSocket server
+            messageInput.value = ''; // Clear the input field
+        };
+
+        function goBack() {
+            window.history.back(); // Navigate back in browser history
+        }
+    </script>
+</body>
+</html>

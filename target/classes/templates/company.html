@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Company</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-bar {
+            width: 100%;
+            background-color: #075e54;
+            color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: fixed; /* Keep the navigation bar at the top */
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure it's above other content */
+        }
+        .nav-bar .home-button, .nav-bar .menu-button {
+            font-size: 18px;
+            cursor: pointer;
+            color: #ffffff;
+            text-decoration: none;
+            background: none;
+            border: none;
+            padding: 10px;
+        }
+        .nav-bar .menu {
+            position: relative;
+        }
+        .nav-bar .menu input[type="checkbox"] {
+            display: none;
+        }
+        .nav-bar .menu .menu-button {
+            font-size: 18px;
+        }
+        .nav-bar .menu .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+            z-index: 1000;
+            width: 150px;
+        }
+        .nav-bar .menu input[type="checkbox"]:checked ~ .dropdown-content {
+            display: block;
+        }
+        .nav-bar .menu .dropdown-content a {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .nav-bar .menu .dropdown-content a:hover {
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 500px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 60px; /* Adjust top margin to avoid overlap with the fixed nav-bar */
+        }
+        .container h2 {
+            margin: 0;
+            color: #075e54;
+            user-select: none;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+            user-select: none;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .checkBox {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .checkBox input {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #075e54;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <div class="left-section">
+            <div class="title">TeamSynK - GroupChat</div>
+            <a class="home-button" th:href="@{/home}">Home</a>
+        </div>
+        <div class="menu">
+            <input type="checkbox" id="menu-toggle">
+            <label class="menu-button" for="menu-toggle">☰</label>
+            <div class="dropdown-content">
+                <a href="#" th:href="@{/settings}">Settings</a>
+                <a href="#" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Create Company</h2>
+        <form th:action="@{/api/company/create}" method="post" th:object="${company}">
+            <div class="form-group">
+                <label for="companyName">Company Name:</label>
+                <input type="text" id="companyName" th:field="*{companyName}" placeholder="Enter company name" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" th:field="*{address}" placeholder="Enter address" required>
+            </div>
+            <div class="form-group">
+                <label for="location">Location:</label>
+                <input type="text" id="location" th:field="*{location}" placeholder="Enter location" required>
+            </div>
+            <div class="form-group checkBox">
+                <input type="checkbox" id="isActive" th:field="*{isActive}">
+                <label for="isActive">Check if the company is active</label>
+            </div>
+            <div class="form-group">
+                <button type="submit">Create Company</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

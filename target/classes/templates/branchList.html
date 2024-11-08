@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch List</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background-color: #ffffff;
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .container h2 {
+            margin-top: 0;
+            color: #075e54;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #075e54;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .status-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .status-button {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .status-button.active {
+            color: #0059FF;
+        }
+        .status-button.inactive {
+            color: #F70D1A;
+        }
+        .status-button.disabled {
+            pointer-events: none;
+            color: #ccc;
+        }
+        .status-label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .btn {
+            padding: 5px 10px;
+            background-color: #075e54;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #128C7E;
+        }
+        .back {
+            padding: 10px 20px;
+            background-color: #075e54;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .back:hover {
+            background-color: #128C7E;
+        }
+    </style>
+</head>
+<body>
+	<div class="nav-bar">
+        <div class="left-section">
+            <div class="title">TeamSynK - GroupChat</div>
+            <a class="home-button" th:href="@{/home}">Home</a>
+        </div>
+        <div class="menu">
+            <input type="checkbox" id="menu-toggle">
+            <label class="menu-button" for="menu-toggle">☰</label>
+            <div class="dropdown-content">
+                <a href="#" th:href="@{/settings}">Settings</a>
+                <a href="#" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Branch List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Branch ID</th>
+                    <th>Branch Name</th>
+                    <th>Company Name</th>
+                    <th>Address</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="branch : ${branches}">
+                    <td th:text="${branch.branchId}"></td>
+                    <td th:text="${branch.branchName}"></td>
+                    <td th:text="${branch.company.companyName}"></td>
+                    <td th:text="${branch.address}"></td>
+                    <td th:text="${branch.location}"></td>
+                    <td>
+                        <span class="status-label" th:text="${branch.isActive ? 'Active' : 'Inactive'}"></span>
+                    </td>
+                    <td>
+                        <div class="status-buttons">
+                            <!-- Deactivate button form -->
+                            <form th:action="@{/api/branch/updateStatus}" method="post" style="display:inline;">
+                                <input type="hidden" name="branchId" th:value="${branch.branchId}" />
+                                <input type="hidden" name="isActive" value="false" />
+                                <button type="submit" class="status-button inactive" th:classappend="${branch.isActive ? '' : 'disabled'}" th:text="'X'"></button>
+                            </form>
+
+                            <!-- Activate button form -->
+                            <form th:action="@{/api/branch/updateStatus}" method="post" style="display:inline;">
+                                <input type="hidden" name="branchId" th:value="${branch.branchId}" />
+                                <input type="hidden" name="isActive" value="true" />
+                                <button type="submit" class="status-button active" th:classappend="${!branch.isActive ? '' : 'disabled'}" th:text="'✓'"></button>
+                            </form>
+
+                            <!-- Edit link -->
+                            <a th:href="@{/api/branch/edit/{id}(id=${branch.branchId})}" class="btn">Edit</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table><br>
+        <a href="#" th:href="@{/api/branch/home}">
+            <button class="back">Back to Create Branch</button>
+        </a>
+    </div>
+</body>
+</html>
